@@ -1,6 +1,8 @@
 package utils;
 
 import java.util.Scanner;
+import models.Cliente;
+import services.ClienteService;
 
 public class Menu {
     public static void verMenu(){
@@ -45,7 +47,7 @@ public class Menu {
     private static void verClienteMenu(Scanner scanner){
         try (scanner) {
             int escolha;
-            
+            ClienteService servico = new ClienteService();
             do{
                 System.out.println("Gerenciamento de Clientes:");
                 System.out.println("1. Incluir novo cliente");
@@ -60,12 +62,55 @@ public class Menu {
                 
                 switch (escolha) {
                     case 1 -> {
+                        
+                        System.out.println("Qual o id do cliente?");
+                                String id = scanner.nextLine();
+                        
+                        System.out.println("Qual o cpf do cliente?");
+                        String cpf = scanner.nextLine();
+                        
+                        System.out.println("Qual o nome do cliente?");
+                        String nome = scanner.nextLine();
+                        
+                        Cliente cliente = new Cliente(id, nome, cpf);
+                        
+                        servico.adicionarCliente(cliente);
                     }
                     case 2 -> {
+                        System.out.println("Qual o id do cliente buscado?");
+                        String id = scanner.nextLine();
+                        
+                        Cliente cliente = servico.buscarCliente(id);
+                        
+                        if(cliente != null){
+                            System.out.println("Nome do cliente = " + cliente.getNome());
+                            System.out.println("Nome do cpf = " + cliente.getCpf());
+                        }else {
+                            System.out.println("Cliente não encontrado!");
+                        }
+                    
+                        
+                        
                     }
                     case 3 -> {
+                        System.out.println("Qual o id do cliente para atualizar?");
+                        String id = scanner.nextLine();
+                        
+                        System.out.println("Qual o cpf atualizado do cliente?");
+                        String cpf = scanner.nextLine();
+                        
+                        System.out.println("Qual o nome atualizado do cliente?");
+                        String nome = scanner.nextLine();
+                        
+                        Cliente cliente = new Cliente(id, nome, cpf);
+                        
+                        servico.atualizarCliente(id, cliente);
                     }
                     case 4 -> {
+                        System.out.println("Qual o id do cliente excluido?");
+                        String id = scanner.nextLine();
+                        
+                        servico.removerCliente(id);
                     }
                     case 5 -> verMenu();
                     default -> System.out.println("Opção inválida.");
