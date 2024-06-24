@@ -1,7 +1,9 @@
 package utils;
 
 import java.util.Scanner;
+import models.Atendente;
 import models.Cliente;
+import services.AtendenteService;
 import services.ClienteService;
 
 public class Menu {
@@ -84,7 +86,7 @@ public class Menu {
                         
                         if(cliente != null){
                             System.out.println("Nome do cliente = " + cliente.getNome());
-                            System.out.println("Nome do cpf = " + cliente.getCpf());
+                            System.out.println("Cpf do cliente = " + cliente.getCpf());
                         }else {
                             System.out.println("Cliente não encontrado!");
                         }
@@ -123,6 +125,7 @@ public class Menu {
     private static void verCaixaMenu(Scanner scanner){
         try (scanner) {
             int escolha;
+            AtendenteService servico = new AtendenteService();
             
             do{
                 System.out.println("Gerenciamento de Atendentes de Caixa:");
@@ -138,12 +141,55 @@ public class Menu {
                 
                 switch (escolha) {
                     case 1 -> {
+                        
+                        System.out.println("Qual o id do atendente?");
+                                String id = scanner.nextLine();
+                        
+                        System.out.println("Qual o cpf do atendente?");
+                        String cpf = scanner.nextLine();
+                        
+                        System.out.println("Qual o nome do atendente?");
+                        String nome = scanner.nextLine();
+                        
+                        Atendente atendente = new Atendente(id, nome, cpf);
+                        
+                        servico.adicionarAtendente(atendente);
                     }
                     case 2 -> {
+                        System.out.println("Qual o id do atendente buscado?");
+                        String id = scanner.nextLine();
+                        
+                        Atendente atendente = servico.buscarAtendente(id);
+                        
+                        if(atendente != null){
+                            System.out.println("Nome do atendente = " + atendente.getNome());
+                            System.out.println("Cpf do atendente = " + atendente.getCpf());
+                        }else {
+                            System.out.println("Atendente não encontrado!");
+                        }
+                    
+                        
+                        
                     }
                     case 3 -> {
+                        System.out.println("Qual o id do atendente para atualizar?");
+                        String id = scanner.nextLine();
+                        
+                        System.out.println("Qual o cpf atualizado do atendente?");
+                        String cpf = scanner.nextLine();
+                        
+                        System.out.println("Qual o nome atualizado do atendente?");
+                        String nome = scanner.nextLine();
+                        
+                        Atendente atendente = new Atendente(id, nome, cpf);
+                        
+                        servico.atualizarAtendente(id, atendente);
                     }
                     case 4 -> {
+                        System.out.println("Qual o id do atendente excluido?");
+                        String id = scanner.nextLine();
+                        
+                        servico.removerAtendente(id);
                     }
                     case 5 -> verMenu();
                     default -> System.out.println("Opção inválida.");
