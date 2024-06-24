@@ -3,8 +3,10 @@ package utils;
 import java.util.Scanner;
 import models.Atendente;
 import models.Cliente;
+import models.Produto;
 import services.AtendenteService;
 import services.ClienteService;
+import services.ProdutoService;
 
 public class Menu {
     public static void verMenu(){
@@ -201,6 +203,7 @@ public class Menu {
     private static void verGerenciadorEstoqueMenu(Scanner scanner){
         try (scanner) {
             int escolha;
+            ProdutoService servico = new ProdutoService();
             
             do{
                 System.out.println("Gerenciamento de Eestoque:");
@@ -216,12 +219,65 @@ public class Menu {
                 
                 switch (escolha) {
                     case 1 -> {
+                        
+                        System.out.println("Qual o id do Produto?");
+                        String id = scanner.nextLine();
+                        
+                        System.out.println("Qual o preco do produto?");
+                        double preco = scanner.nextDouble();
+                        scanner.nextLine();
+                        
+                        System.out.println("Qual o nome do produto?");
+                        String nome = scanner.nextLine();
+                        
+                        System.out.println("Qual a quantidade em estoque do produto?");
+                        int estoque = scanner.nextInt();
+                        scanner.nextLine();
+                        
+                        Produto produto = new Produto(id, nome, preco, estoque);
+                        
+                        servico.adicionarProduto(produto);
                     }
                     case 2 -> {
+                        System.out.println("Qual o id do Produto buscado?");
+                        String id = scanner.nextLine();
+                        
+                        Produto produto = servico.buscarProduto(id);
+                        
+                        if(produto != null){
+                            System.out.println("Nome do atendente = " + produto.getNome());
+                            System.out.println("Preco do produto = " + produto.getPreco());
+                            System.out.println("Quantidade em estoque = " + produto.getQuantidade());
+                        }else {
+                            System.out.println("Atendente não encontrado!");
+                        }
                     }
                     case 3 -> {
+                        System.out.println("Qual o id do produto para atualizar?");
+                        String id = scanner.nextLine();
+                        
+                        Produto oldProduto = servico.buscarProduto(id);
+                        
+                        String nome = oldProduto.getNome();
+                        
+                        System.out.println("Qual o preco do produto? Atual: R$" + oldProduto.getPreco());
+                        double preco = scanner.nextDouble();
+                        scanner.nextLine();
+                        
+                        
+                        System.out.println("Qual a quantidade em estoque do produto? Atual: " + oldProduto.getQuantidade());
+                        int estoque = scanner.nextInt();
+                        scanner.nextLine();
+                        
+                        Produto produto = new Produto(id, nome, preco, estoque);
+                        
+                        servico.atualizarProduto(id, produto);
                     }
                     case 4 -> {
+                        System.out.println("Qual o id do produto excluido?");
+                        String id = scanner.nextLine();
+                        
+                        servico.removerProduto(id);
                     }
                     case 5 -> verMenu();
                     default -> System.out.println("Opção inválida.");
